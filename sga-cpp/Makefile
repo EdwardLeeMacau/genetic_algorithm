@@ -19,7 +19,9 @@ LINK = $^ -o $@ $(addprefix -L,$(LIBDIRS)) $(addprefix -l,$(LIBS))
 # Auto-dependencies
 ###############################################################
 
-SRCS = $(wildcard *.cpp)
+CCSRCS = $(wildcard *.c)
+CXSRCS = $(wildcard *.cpp)
+SRCS = $(CCSRCS) $(CXSRCS)
 INCS =
 
 OBJS = $(addsuffix .o, $(basename $(SRCS)))
