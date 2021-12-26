@@ -7,21 +7,24 @@
 #include "global.h"
 #include "chromosome.h"
 
-/* 
-    Create a chromosome 
-*/
-Chromosome::Chromosome ()
+/**
+ * Create an empty gene container.
+ * @brief Default constructor
+ * @see Chromosome::Chromosome(int n_length)
+ */
+Chromosome::Chromosome()
 {
     length = 0;
     gene = NULL;
     evaluated = false;
 }
 
-/* 
-    Create a chromosome with length N
-
-    @param n_length The length of chromosome
-*/
+/**
+ * Create a chromosome with specified length
+ * @brief Constructor
+ * @param[in] n_length The length of chromosome
+ * @see Chromosome::Chromosome()
+ */
 Chromosome::Chromosome (int n_length)
 {
     gene = NULL;
@@ -34,7 +37,10 @@ Chromosome::~Chromosome ()
     delete[] gene;
 }
 
-
+/**
+ * Reset chromosome with specified length
+ * @param[in] n_length    length of chromosome
+ */
 void Chromosome::init (int n_length)
 {
     length = n_length;
@@ -46,11 +52,10 @@ void Chromosome::init (int n_length)
     evaluated = false;
 }
 
-/*
-    Get the value of gene in specified index.
-
-    @params index Index of the bit
-*/
+/**
+ * Get the value of gene in specified index.
+ * @param[in] index    Index of the bit to be queried.
+ */
 int Chromosome::getVal (int index) const
 {
     if (index < 0 || index > length)
@@ -59,9 +64,11 @@ int Chromosome::getVal (int index) const
     return (gene[index])? 1:0;
 }
 
-/*
-    Set the value of gene in specified index.
-*/
+/**
+ * Set the value of gene in specified index.
+ * @param[in] index    Index of the bit to be configured.
+ * @param[in] val      Target value
+ */
 void Chromosome::setVal (int index, int val)
 {
     if (index < 0 || index > length)
@@ -71,7 +78,12 @@ void Chromosome::setVal (int index, int val)
     evaluated = false;
 }
 
-
+/**
+ * Return fitness of the chromosome
+ * @details Calculates fitness if it's not calculated before.
+ * @return Fitness value
+ * @see Chromosome::evaluate()
+ */
 double Chromosome::getFitness ()
 {
     if (evaluated)
@@ -80,24 +92,21 @@ double Chromosome::getFitness ()
         return (fitness = evaluate ());
 }
 
-
-bool Chromosome::isEvaluated () const
-{
-    return evaluated;
-}
-
-/*  Evaluation function of the chromosome  */
+/**
+ * Evaluate fitness of the chromosome
+ * @return Fitness value
+ * @see Chromosome::getFitness
+ */
 double Chromosome::evaluate ()
 {
     evaluated = true;
     return oneMax ();
 }
 
-/* 
-    OneMax Function
-
-    @return double
-*/
+/**
+ * Evaluate fitness of gene with one-max function
+ * @return double
+ */
 double Chromosome::oneMax () const
 {
     double result = 0;
@@ -108,8 +117,20 @@ double Chromosome::oneMax () const
     return result;
 }
 
+/**
+ * For OneMax
+ * @brief Get max fitness of one-max function, which indicates searching is ended.
+ */
+double Chromosome::getMaxFitness () const
+{
+    return ((double)length - 1e-6);
+}
 
-Chromosome & Chromosome::operator= (const Chromosome & c)
+/**
+ * @brief Assign operator
+ * @param[in] c    Reference of chromosome
+ */
+Chromosome& Chromosome::operator= (const Chromosome & c)
 {
     int i;
 
@@ -135,14 +156,19 @@ void Chromosome::printf () const
         ::printf ("%d", gene[i]);
 }
 
+/**
+ * @return whether the chromosome is evaluated.
+ */
+bool Chromosome::isEvaluated () const
+{
+    return evaluated;
+}
 
-int Chromosome::getLength () const {
+/**
+ * @return The length of chromosome
+ */
+int Chromosome::getLength () const
+{
     return length;
 }
 
-
-double Chromosome::getMaxFitness () const
-{
-    // For OneMax
-    return ((double)length - 1e-6);
-}
